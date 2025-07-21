@@ -37,14 +37,7 @@ jobs:
 
       - name: Confirm release.zip exists
         run: ls -lh release.zip
-      - name: Set startup command
-        uses: azure/appservice-settings@v1
-        with:
-         app-name: 'bruno-bot'
-         app-settings-json: |
-           {
-             "startupCommand": "python bruno_server.py"
-           }
+        
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
