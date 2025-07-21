@@ -68,6 +68,6 @@ jobs:
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
-  app-name: 'bruno-bot'
-  slot-name: 'Production'
-  package: './'  # Deploy the current folder, not the tar.gz
+            app-name: 'bruno-bot'
+            slot-name: 'Production'
+            package: './'  # Deploy the current folder, not the tar.gz
