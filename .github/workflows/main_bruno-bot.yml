@@ -1,6 +1,6 @@
 # Azure Web Apps Deploy action docs: https://github.com/Azure/webapps-deploy
 # Additional GitHub Actions for Azure: https://github.com/Azure/actions
-# Python on Azure App Service guidance: https://aka.ms/python-webapps-actions
+# Python on Azure App Service guidance: https://aka.ms/python-webapps-actions l
 
 name: Build and deploy Python app to Azure Web App - bruno-bot
 
