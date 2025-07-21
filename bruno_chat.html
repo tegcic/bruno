@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Chat with Bruno</title>
   <style>
     body {
@@ -67,23 +67,23 @@
 <body>
   <div id="chatbox">
     <h2>Talk to Bruno</h2>
-    <div id="messages" aria-live="polite"></div>
+    <div id="messages" role="log" aria-live="polite"></div>
     <input type="text" id="userInput" placeholder="Type your message here..." aria-label="Type your message here" />
     <button onclick="sendMessage()" aria-label="Send message">Send</button>
   </div>
 
   <script>
     window.onload = () => {
-      const messagesDiv = document.getElementById('messages');
+      const messagesDiv = document.getElementById("messages");
       messagesDiv.innerHTML += `<div class="message"><span class="bruno">Bruno:</span> Hello, I'm Bruno. How can I help today?</div>`;
     };
 
     async function sendMessage() {
-      const input = document.getElementById('userInput');
+      const input = document.getElementById("userInput");
       const message = input.value.trim();
       if (!message) return;
 
-      const messagesDiv = document.getElementById('messages');
+      const messagesDiv = document.getElementById("messages");
       messagesDiv.innerHTML += `<div class="message"><span class="user">You:</span> ${message}</div>`;
       input.value = "";
 
@@ -92,11 +92,19 @@
       messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
       try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 10000); // 10s timeout
+
         const response = await fetch("https://bruno-bot-fufacvbkdhhcfebz.canadacentral-01.azurewebsites.net/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message })
+          body: JSON.stringify({ message }),
+          signal: controller.signal,
         });
+
+        clearTimeout(timeout);
+
+        if (!response.ok) throw new Error(`Server returned ${response.status}`);
 
         const data = await response.json();
         const reply = data.reply || "Bruno didn’t respond. Please try again.";
@@ -106,13 +114,13 @@
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
       } catch (error) {
         document.getElementById(typingId).remove();
-        messagesDiv.innerHTML += `<div class="message"><span class="bruno">Bruno:</span> Sorry, something went wrong.</div>`;
-        console.error("Fetch error:", error);
+        messagesDiv.innerHTML += `<div class="message"><span class="bruno">Bruno:</span> ⚠️ ${error.message}</div>`;
+        console.error("Bruno fetch error:", error);
       }
     }
-    
-    document.getElementById('userInput').addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') sendMessage();
+
+    document.getElementById("userInput").addEventListener("keypress", function (e) {
+      if (e.key === "Enter") sendMessage();
     });
   </script>
 </body>
