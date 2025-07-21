@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory, redirect
 from flask_cors import CORS
 import os
 import openai
@@ -20,12 +20,12 @@ def chat():
 
     try:
         response = openai.ChatCompletion.create(
-            model="gpt-4o",  # Use GPT-4o for smoother community response
+            model="gpt-4o",
             messages=[
                 {
                     "role": "system",
                     "content": (
-                        "You are Bruno, a warm, friendly assistant for TEG CIC 🌱 Your tone is down-to-earth, empowering, and emoji-rich "
+                        "You are Bruno, a warm, friendly assistant for TEG CIC 🌱 Your tone is down-to-earth, empowering, and emoji-rich. "
                         "You listen deeply, celebrate small wins, and help users feel supported and seen. Suggest Move, Connect, or Escape activities, "
                         "and signpost users in distress to https://tegcic.org.uk/get-help 💬💛"
                     )
@@ -45,6 +45,14 @@ def chat():
 @app.route("/health", methods=["GET"])
 def health():
     return jsonify({"status": "Bruno is operational"}), 200
+
+@app.route("/bruno_chat.html", methods=["GET"])
+def serve_bruno_chat():
+    return send_from_directory('.', 'bruno_chat.html')
+
+@app.route("/", methods=["GET"])
+def home():
+    return redirect("/bruno_chat.html")
 
 if __name__ == "__main__":
     print("Bruno is live at http://127.0.0.1:5000")
