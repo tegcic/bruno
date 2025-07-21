@@ -36,12 +36,12 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}      
           
       - name: Set WEBSITE_RUN_FROM_PACKAGE
-        uses: azure/appservice-settings@v1
+        uses: azure/appservice-settings@v2
         with:
          app-name: 'bruno-bot'
          app-settings-json: |
           {
-          "WEBSITE_RUN_FROM_PACKAGE": "1"
+            "WEBSITE_RUN_FROM_PACKAGE": "1"
           }
       - name: Debug JSON
         run: |
