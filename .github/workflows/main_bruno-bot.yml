@@ -39,10 +39,7 @@ jobs:
         uses: azure/appservice-settings@v1
         with:
           app-name: 'bruno-bot'
-          app-settings-json: |
-            {
-              "WEBSITE_RUN_FROM_PACKAGE": "1"
-            }
+          app-settings-json: '{"WEBSITE_RUN_FROM_PACKAGE": "1"}'
 
       - name: Confirm release.zip exists
         run: ls -lh release.zip
