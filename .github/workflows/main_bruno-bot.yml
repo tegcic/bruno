@@ -39,6 +39,7 @@ jobs:
         uses: azure/appservice-settings@v1
         with:
           app-name: 'bruno-bot'
+          resource-group: 'bruno-bot'
           app-settings-json: |
             {
               "WEBSITE_RUN_FROM_PACKAGE": "1"
