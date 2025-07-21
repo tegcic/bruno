@@ -25,7 +25,7 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Create deployment ZIP
+      - name: Package app files
         run: zip -r release.zip . -x "venv/*" ".git/*" ".github/*"
 
       - name: Azure Login
@@ -33,13 +33,16 @@ jobs:
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}      
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Set WEBSITE_RUN_FROM_PACKAGE
+      - name: Disable build during deployment
         uses: azure/appservice-settings@v1
         with:
           app-name: 'bruno-bot'
-          app-settings-json: '{"WEBSITE_RUN_FROM_PACKAGE": "1"}'
+          app-settings-json: |
+            {
+              "SCM_DO_BUILD_DURING_DEPLOYMENT": "false"
+            }
 
       - name: Confirm release.zip exists
         run: ls -lh release.zip
