@@ -70,4 +70,4 @@ jobs:
         with:
             app-name: 'bruno-bot'
             slot-name: 'Production'
-            package: './'  # Deploy the current folder, not the tar.gz
+            package: '${{ github.workspace }}'
