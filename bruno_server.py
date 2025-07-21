@@ -55,5 +55,7 @@ def home():
     return redirect("/bruno_chat.html")
 
 if __name__ == "__main__":
-    print("Bruno is live at http://127.0.0.1:5000")
-    app.run(debug=True)
+    import os
+    port = int(os.environ.get("PORT", 8000))
+    print(f"Bruno is live at http://0.0.0.0:{port}")
+    app.run(host="0.0.0.0", port=port)
