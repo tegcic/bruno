@@ -36,7 +36,7 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}      
           
       - name: Set WEBSITE_RUN_FROM_PACKAGE
-        uses: azure/appservice-settings@v2
+        uses: azure/appservice-settings@v1
         with:
          app-name: 'bruno-bot'
          app-settings-json: |
