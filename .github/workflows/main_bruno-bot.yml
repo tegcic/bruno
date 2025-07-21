@@ -27,10 +27,9 @@ jobs:
 
       - name: Create deployment ZIP
         run: |
-          zip -r bruno-deploy.zip . -x "venv/*" ".git/*" ".github/*"
+          zip -r release.zip . -x "venv/*" ".git/*" ".github/*"
           
-      - name: Confirm bruno-deploy.zip exists
-        run: ls -lh bruno-deploy.zip
+
         
       - name: Azure Login
         uses: azure/login@v2
@@ -39,6 +38,8 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
+      - name: Confirm release.zip exists
+        run: ls -lh release.zip
          
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
