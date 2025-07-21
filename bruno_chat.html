@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat with Bruno</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0a0a0a;
+      padding: 20px;
+      color: white;
+    }
+    #chatbox {
+      width: 100%;
+      max-width: 600px;
+      margin: auto;
+      background: #1a1a1a;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 255, 213, 0.4);
+    }
+    #messages {
+      height: 300px;
+      overflow-y: auto;
+      border: 1px solid #00ffd5;
+      padding: 10px;
+      background: #2a2a2a;
+      margin-bottom: 15px;
+      border-radius: 4px;
+    }
+    .message {
+      margin-bottom: 10px;
+    }
+    .user {
+      font-weight: bold;
+      color: #fff;
+    }
+    .bruno {
+      font-weight: bold;
+      color: #00ffd5;
+    }
+    #userInput {
+      width: calc(100% - 12px);
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #00ffd5;
+      border-radius: 4px;
+      margin-bottom: 10px;
+      background: #1a1a1a;
+      color: white;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #00ffd5;
+      color: #0a0a0a;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #00ffc3;
+    }
+  </style>
+</head>
+<body>
+  <div id="chatbox">
+    <h2>Talk to Bruno</h2>
+    <div id="messages" aria-live="polite"></div>
+    <input type="text" id="userInput" placeholder="Type your message here..." aria-label="Type your message here" />
+    <button onclick="sendMessage()" aria-label="Send message">Send</button>
+  </div>
+
+  <script>
+    window.onload = () => {
+      const messagesDiv = document.getElementById('messages');
+      messagesDiv.innerHTML += `<div class="message"><span class="bruno">Bruno:</span> Hello, I'm Bruno. How can I help today?</div>`;
+    };
+
+    async function sendMessage() {
+      const input = document.getElementById('userInput');
+      const message = input.value.trim();
+      if (!message) return;
+
+      const messagesDiv = document.getElementById('messages');
+      messagesDiv.innerHTML += `<div class="message"><span class="user">You:</span> ${message}</div>`;
+      input.value = "";
+
+      const typingId = "typing";
+      messagesDiv.innerHTML += `<div class="message" id="${typingId}"><span class="bruno">Bruno:</span> typing...</div>`;
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+      try {
+        const response = await fetch("http://127.0.0.1:5000/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message })
+        });
+
+        const data = await response.json();
+        const reply = data.reply || "Bruno didn’t respond. Please try again.";
+
+        document.getElementById(typingId).remove();
+        messagesDiv.innerHTML += `<div class="message"><span class="bruno">Bruno:</span> ${reply}</div>`;
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      } catch (error) {
+        document.getElementById(typingId).remove();
+        messagesDiv.innerHTML += `<div class="message"><span class="bruno">Bruno:</span> Sorry, something went wrong.</div>`;
+        console.error("Fetch error:", error);
+      }
+    }
+    
+    document.getElementById('userInput').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') sendMessage();
+    });
+  </script>
+</body>
+</html>
