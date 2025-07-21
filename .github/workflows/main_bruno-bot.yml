@@ -35,15 +35,6 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Disable build during deployment
-        uses: azure/appservice-settings@v1
-        with:
-          app-name: 'bruno-bot'
-          app-settings-json: |
-            {
-              "SCM_DO_BUILD_DURING_DEPLOYMENT": "false"
-            }
-
       - name: Confirm release.zip exists
         run: ls -lh release.zip
 
