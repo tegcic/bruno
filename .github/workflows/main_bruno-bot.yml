@@ -40,9 +40,15 @@ jobs:
       - name: Set WEBSITE_RUN_FROM_PACKAGE
         uses: azure/appservice-settings@v1
         with:
-          app-name: 'bruno-bot'
-          app-settings-json: '{"WEBSITE_RUN_FROM_PACKAGE": "1"}'
-
+         app-name: 'bruno-bot'
+         app-settings-json: |
+          {
+          "WEBSITE_RUN_FROM_PACKAGE": "1"
+          }
+      - name: Debug JSON
+        run: |
+         echo "${{ github.workspace }} => {\"WEBSITE_RUN_FROM_PACKAGE\": \"1\"}"
+         
       - name: Confirm release.zip exists
         run: ls -lh release.zip
 
