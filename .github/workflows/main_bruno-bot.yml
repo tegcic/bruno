@@ -51,3 +51,10 @@ jobs:
           app-name: 'bruno-bot'
           slot-name: 'production'
           package: '${{ github.workspace }}/release.zip'
+
+      - name: Deploy to Azure Web App (test)
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: 'bruno-bot'
+          slot-name: 'live-g5brg7dsekb7fed8'
+          package: '${{ github.workspace }}/release.zip'
